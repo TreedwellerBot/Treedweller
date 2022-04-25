@@ -49,6 +49,20 @@ async def verify(ctx, code):
     await ctx.message.delete()
 
 
+@bot.command(pass_context=True, name='rate')
+async def rate(ctx, target: discord.User):
+    rater = ctx.message.author.id
+    ratee = ctx.message.mentions[0].id
+    cur.execute(f"SELECT rated_id FROM ratings WHERE rated_id=? AND user_id=?", (ratee, rater))
+    exists = cur.fetchall()
+    if not exists:
+        cur.execute(f'''INSERT INTO ratings VALUES ('{ratee}','{rater}')''')
+        con.commit()
+        await ctx.message.author.send(f'You just positively rated {ratee}')
+    else:
+        await ctx.message.author.send(f'You\'ve already rated that user, or they don\'t exist in the server.')
+
+
 # UTILITY FUNCTIONS
 def uniquecode():
     regcode = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
