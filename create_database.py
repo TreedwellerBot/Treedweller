@@ -22,7 +22,6 @@ cur.execute('''CREATE TABLE invites (
 cur.execute('''CREATE TABLE ratings (
                 rated_id INTEGER,
                 user_id INTEGER,
-                rating INTEGER,
                 FOREIGN KEY (rated_id) REFERENCES members (user_id),
                 FOREIGN KEY (user_id) REFERENCES members (user_id),
                 PRIMARY KEY (rated_id)
